@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="hs.myapplication.SetWallpaper">
+
+
+    <ImageView
+        android:id="@+id/img_wall"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <Button
+        android:id="@+id/btn_setAswallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="设为壁纸"/>
+    <Button
+        android:id="@+id/btn_choose_pic"
+        android:layout_below="@id/btn_setAswallpaper"
+        android:text="选择照片"
+        android:layout_width="match_parent"
+        android:layout_height="48dp" />
+    <Button
+        android:id="@+id/btn_setColor"
+        android:layout_below="@id/btn_choose_pic"
+        android:text="颜色渐变切换"
+        android:layout_width="match_parent"
+        android:layout_height="48dp" />
+    <Button
+        android:id="@+id/btn_setColorStatic"
+        android:layout_below="@id/btn_setColor"
+        android:text="静态变化"
+        android:layout_width="match_parent"
+        android:layout_height="48dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@id/btn_setColorStatic">
+
+        <Button
+            android:id="@+id/btn_chooseColorStart"
+            android:text="选择起始颜色"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="48dp" />
+        <Button
+            android:id="@+id/btn_chooseColorEnd"
+            android:text="选择结束颜色"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="48dp" />
+        </LinearLayout>
+
+
+
+</RelativeLayout>
