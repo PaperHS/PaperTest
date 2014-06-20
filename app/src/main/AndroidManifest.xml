@@ -26,6 +26,12 @@
             android:name=".Colorpicker"
             android:label="@string/title_activity_colorpicker" >
         </activity>
+
+        <service
+            android:name=".LiveWallHsService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>
