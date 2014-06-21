@@ -25,12 +25,17 @@ import android.widget.ImageView;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import otto.BusProvider;
+import otto.ColorEvent;
+import utils.Misc;
 
 public class SetWallpaper extends Activity {
 
@@ -40,6 +45,9 @@ public class SetWallpaper extends Activity {
 	private int mColorEnd;
     @InjectView(R.id.img_wall)
     ImageView mImg;
+	private ColorPickerDialog mColorPickerDialog;
+	private boolean isStart;
+	private Bus mBus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +55,11 @@ public class SetWallpaper extends Activity {
         setContentView(R.layout.activity_set_wallpaper);
         ButterKnife.inject(this);
         mWallpaperManager = WallpaperManager.getInstance(this);
-
-    }
+		mColorPickerDialog = new ColorPickerDialog(this,mImg.getRootView());
+    	//init otto
+		mBus = BusProvider.getInstance();
+		mBus.register(this);
+	}
 
 
     @Override
@@ -58,7 +69,13 @@ public class SetWallpaper extends Activity {
         return true;
     }
 
-    @Override
+	@Override
+	protected void onDestroy() {
+		mBus.unregister(this);
+		super.onDestroy();
+	}
+
+	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -76,8 +93,9 @@ public class SetWallpaper extends Activity {
 //        mImg.setImageDrawable(mWallpaperManager.getDrawable());
 
         try{
-         mWallpaperManager.setBitmap(mImg.getDrawingCache());
-		 mImg.setDrawingCacheEnabled(false);
+			mWallpaperManager.suggestDesiredDimensions(Misc.getScreenWidth(this),Misc.getScreenHeight(this));
+        	mWallpaperManager.setBitmap(mImg.getDrawingCache());
+		 	mImg.setDrawingCacheEnabled(false);
         }catch (IOException e){
             e.printStackTrace();
 
@@ -127,11 +145,13 @@ public class SetWallpaper extends Activity {
 
 	@OnClick(R.id.btn_chooseColorStart)
 	public void chooseColorStart(){
-		startActivityForResult(new Intent(this, Colorpicker.class), 2);
+		isStart = true;
+		mColorPickerDialog.show();
 	}
 	@OnClick(R.id.btn_chooseColorEnd)
 	public void btn_chooseColorEnd(){
-		startActivityForResult(new Intent(this, Colorpicker.class), 3);
+		isStart = false;
+		mColorPickerDialog.show();
 	}
 
     @Override
@@ -171,6 +191,14 @@ public class SetWallpaper extends Activity {
 		return bitmap;
 	}
 
+	@Subscribe
+	public void getColor(ColorEvent event){
+		if (isStart){
+			mColorStart = event.getColor();
+		}else{
+			mColorEnd = event.getColor();
+		}
+	}
 
 
 }

@@ -3,6 +3,7 @@
     package="hs.myapplication" >
 
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
     <uses-feature android:name="android.software.live_wallpaper" />
     <uses-feature android:name="android.software.live_wallpaper" />
     <application

@@ -1,13 +1,10 @@
 package hs.myapplication;
 
-import android.app.Service;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.SystemClock;
 import android.service.wallpaper.WallpaperService;
 import android.view.MotionEvent;
