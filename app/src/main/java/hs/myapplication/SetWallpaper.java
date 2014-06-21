@@ -98,7 +98,6 @@ public class SetWallpaper extends Activity {
 		 	mImg.setDrawingCacheEnabled(false);
         }catch (IOException e){
             e.printStackTrace();
-
         }
 
     }
@@ -111,7 +110,7 @@ public class SetWallpaper extends Activity {
 //		p.setShader(lg);
 		Bitmap.Config config =  Bitmap.Config.ARGB_8888;
 		// 建立对应 bitmap
-		Bitmap bitmap = Bitmap.createBitmap(720,1080,config);
+		Bitmap bitmap = Bitmap.createBitmap(Misc.getScreenWidth(this),Misc.getScreenHeight(this)-Misc.getStatusBarHeight(this)-getActionBar().getHeight(),config);
 		Canvas cv = new Canvas(bitmap);
 		Paint p=new Paint();
 		LinearGradient lg=new LinearGradient(0.0f,0.0f,0f,1080f,mColorStart,mColorEnd, Shader.TileMode.CLAMP);
@@ -198,6 +197,10 @@ public class SetWallpaper extends Activity {
 		}else{
 			mColorEnd = event.getColor();
 		}
+//        if (mColorEnd != 0 && mColorStart != 0){
+//
+//        }
+        setColorStatic();
 	}
 
 
