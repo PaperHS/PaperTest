@@ -18,6 +18,7 @@ import butterknife.InjectViews;
 import butterknife.OnClick;
 import otto.BusProvider;
 import otto.ColorEvent;
+import utils.LogUtil;
 
 /**
  * Created by Peggy on 2014/6/21.
@@ -49,9 +50,11 @@ public class ColorPickerDialog {
 		ButterKnife.inject(this, mRootLayout);
 		mPicker.addSVBar(mSvbar);
 		mPicker.setShowOldCenterColor(false);
+        mColorEvent.setColor(-6619334);
 		mPicker.setOnColorSelectedListener(new ColorPicker.OnColorSelectedListener() {
 			@Override
 			public void onColorSelected(int i) {
+                LogUtil.d("color:"+i);
 				mColorEvent.setColor(i);
 			}
 		});

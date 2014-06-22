@@ -22,6 +22,7 @@
         </activity>
         <activity
             android:name=".SetWallpaper"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:label="@string/title_activity_set_wallpaper" >
         </activity>
         <activity

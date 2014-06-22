@@ -5,26 +5,20 @@ import android.app.WallpaperManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.RadialGradient;
 import android.graphics.Shader;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.SweepGradient;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
-import com.nineoldandroids.animation.ArgbEvaluator;
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.animation.ValueAnimator;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -36,18 +30,28 @@ import butterknife.OnClick;
 import otto.BusProvider;
 import otto.ColorEvent;
 import utils.Misc;
+import widget.CircleButton;
 
 public class SetWallpaper extends Activity {
 
 	private static final String TAG = "HSTAG";
     private WallpaperManager mWallpaperManager;
-	private int mColorStart;
-	private int mColorEnd;
+	private int mColorStart=-1230848;
+	private int mColorEnd = -14114049;
     @InjectView(R.id.img_wall)
     ImageView mImg;
+    @InjectView(R.id.btn_chooseColorEnd)
+    CircleButton mBtnColorEnd;
+    @InjectView(R.id.btn_chooseColorStart)
+    CircleButton mBtnColorStart;
 	private ColorPickerDialog mColorPickerDialog;
 	private boolean isStart;
 	private Bus mBus;
+    private int mCurrentGradient;
+    public static final int LINEAR = 0;
+    public static final int RADIAL = 1;
+    public static final int SWEEP = 2;
+    private boolean mIsFirstLoad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +63,19 @@ public class SetWallpaper extends Activity {
     	//init otto
 		mBus = BusProvider.getInstance();
 		mBus.register(this);
+        mBtnColorStart.setColor(mColorStart);
+        mBtnColorEnd.setColor(mColorEnd);
+        mIsFirstLoad = true;
 	}
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (mIsFirstLoad){
+            mIsFirstLoad = false;
+            setColorLinear();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,7 +105,6 @@ public class SetWallpaper extends Activity {
 
     @OnClick(R.id.btn_setAswallpaper)
     public void setAswallpaper(){
-//        mImg.setImageDrawable(mWallpaperManager.getDrawable());
 
         try{
 			mWallpaperManager.suggestDesiredDimensions(Misc.getScreenWidth(this),Misc.getScreenHeight(this));
@@ -102,45 +116,78 @@ public class SetWallpaper extends Activity {
 
     }
 
-	@OnClick(R.id.btn_setColorStatic)
-	public void setColorStatic(){
-		Log.d(TAG,"setColorStatic");
-//		Paint p=new Paint();
-//		LinearGradient lg=new LinearGradient(0.0f,0.0f,100.0f,100.0f,Color.BLUE,Color.GREEN, Shader.TileMode.MIRROR);
-//		p.setShader(lg);
+	@OnClick(R.id.btn_linear)
+	public void setColorLinear(){
 		Bitmap.Config config =  Bitmap.Config.ARGB_8888;
 		// 建立对应 bitmap
-		Bitmap bitmap = Bitmap.createBitmap(Misc.getScreenWidth(this),Misc.getScreenHeight(this)-Misc.getStatusBarHeight(this)-getActionBar().getHeight(),config);
+		Bitmap bitmap = Bitmap.createBitmap(Misc.getScreenWidth(this),Misc.getScreenHeight(this)-Misc.getStatusBarHeight(this),config);
 		Canvas cv = new Canvas(bitmap);
 		Paint p=new Paint();
+//        RadialGradient lg  = new RadialGradient(Misc.getScreenWidth(this)/2,Misc.getScreenHeight(this)/2,400,mColorStart,mColorEnd, Shader.TileMode.CLAMP);
 		LinearGradient lg=new LinearGradient(0.0f,0.0f,0f,1080f,mColorStart,mColorEnd, Shader.TileMode.CLAMP);
-		p.setShader(lg);
+//        SweepGradient lg = new SweepGradient(Misc.getScreenWidth(this)+1f,Misc.getScreenHeight(this)/2f,mColorStart,mColorEnd);
+        p.setShader(lg);
 		cv.drawPaint(p);
+        mImg.setDrawingCacheEnabled(false);
 		mImg.setDrawingCacheEnabled(true);
 		mImg.setImageBitmap(bitmap);
-//		GradientDrawable grad = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
-//				new int[] { Color.GREEN, Color.WHITE });
-//
-//		mImg.setImageDrawable(grad.mutate());
+        mCurrentGradient = LINEAR;
+
+	}
+	@OnClick(R.id.btn_radial)
+	public void setColorRadial(){
+		Bitmap.Config config =  Bitmap.Config.ARGB_8888;
+		// 建立对应 bitmap
+		Bitmap bitmap = Bitmap.createBitmap(Misc.getScreenWidth(this),Misc.getScreenHeight(this)-Misc.getStatusBarHeight(this),config);
+		Canvas cv = new Canvas(bitmap);
+		Paint p=new Paint();
+        RadialGradient lg  = new RadialGradient(Misc.getScreenWidth(this)/2,Misc.getScreenHeight(this)/2,400,mColorStart,mColorEnd, Shader.TileMode.CLAMP);
+//		LinearGradient lg=new LinearGradient(0.0f,0.0f,0f,1080f,mColorStart,mColorEnd, Shader.TileMode.CLAMP);
+//        SweepGradient lg = new SweepGradient(Misc.getScreenWidth(this)+1f,Misc.getScreenHeight(this)/2f,mColorStart,mColorEnd);
+        p.setShader(lg);
+		cv.drawPaint(p);
+        mImg.setDrawingCacheEnabled(false);
+		mImg.setDrawingCacheEnabled(true);
+		mImg.setImageBitmap(bitmap);
+        mCurrentGradient = RADIAL;
+	}
+	@OnClick(R.id.btn_sweep)
+	public void setColorSweep(){
+		Bitmap.Config config =  Bitmap.Config.ARGB_8888;
+		// 建立对应 bitmap
+		Bitmap bitmap = Bitmap.createBitmap(Misc.getScreenWidth(this),Misc.getScreenHeight(this),config);
+		Canvas cv = new Canvas(bitmap);
+		Paint p=new Paint();
+//        RadialGradient lg  = new RadialGradient(Misc.getScreenWidth(this)/2,Misc.getScreenHeight(this)/2,400,mColorStart,mColorEnd, Shader.TileMode.CLAMP);
+//		LinearGradient lg=new LinearGradient(0.0f,0.0f,0f,1080f,mColorStart,mColorEnd, Shader.TileMode.CLAMP);
+        SweepGradient lg = new SweepGradient(Misc.getScreenWidth(this)+1f,Misc.getScreenHeight(this)/2f,mColorStart,mColorEnd);
+        p.setShader(lg);
+		cv.drawPaint(p);
+        mImg.setDrawingCacheEnabled(false);
+		mImg.setDrawingCacheEnabled(true);
+		mImg.setImageBitmap(bitmap);
+        mCurrentGradient = SWEEP;
 	}
 
-	@OnClick(R.id.btn_setColor)
-	public void setColor(){
-		Log.d(TAG,"btn_setColor");
-		ValueAnimator colorAnim = ObjectAnimator.ofInt(mImg, "backgroundColor", /*Red*/mColorStart, /*Blue*/mColorEnd);
-		colorAnim.setDuration(3000);
-		colorAnim.setEvaluator(new ArgbEvaluator());
-		colorAnim.setRepeatCount(ValueAnimator.INFINITE);
-		colorAnim.setRepeatMode(ValueAnimator.REVERSE);
-		colorAnim.start();
-	}
 
-    @OnClick(R.id.btn_choose_pic)
-    public void choosePic(){
-        Intent intentPick = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intentPick, 1);
-    }
+
+//	@OnClick(R.id.btn_setColor)
+//	public void setColor(){
+//		Log.d(TAG,"btn_setColor");
+//		ValueAnimator colorAnim = ObjectAnimator.ofInt(mImg, "backgroundColor", /*Red*/mColorStart, /*Blue*/mColorEnd);
+//		colorAnim.setDuration(3000);
+//		colorAnim.setEvaluator(new ArgbEvaluator());
+//		colorAnim.setRepeatCount(ValueAnimator.INFINITE);
+//		colorAnim.setRepeatMode(ValueAnimator.REVERSE);
+//		colorAnim.start();
+//	}
+
+//    @OnClick(R.id.btn_choose_pic)
+//    public void choosePic(){
+//        Intent intentPick = new Intent(Intent.ACTION_PICK,
+//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        startActivityForResult(intentPick, 1);
+//    }
 
 	@OnClick(R.id.btn_chooseColorStart)
 	public void chooseColorStart(){
@@ -194,13 +241,23 @@ public class SetWallpaper extends Activity {
 	public void getColor(ColorEvent event){
 		if (isStart){
 			mColorStart = event.getColor();
+            mBtnColorStart.setColor(event.getColor());
 		}else{
 			mColorEnd = event.getColor();
+            mBtnColorEnd.setColor(event.getColor());
 		}
-//        if (mColorEnd != 0 && mColorStart != 0){
-//
-//        }
-        setColorStatic();
+        switch(mCurrentGradient){
+
+            case RADIAL:
+                setColorRadial();
+                break;
+            case SWEEP:
+                setColorSweep();
+                break;
+            default:
+                setColorLinear();
+                break;
+        }
 	}
 
 
