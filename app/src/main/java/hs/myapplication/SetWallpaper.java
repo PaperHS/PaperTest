@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.squareup.otto.Bus;
@@ -29,6 +30,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import otto.BusProvider;
 import otto.ColorEvent;
+import utils.LogUtil;
 import utils.Misc;
 import widget.CircleButton;
 
@@ -36,7 +38,7 @@ public class SetWallpaper extends Activity {
 
 	private static final String TAG = "HSTAG";
     private WallpaperManager mWallpaperManager;
-	private int mColorStart=-1230848;
+	private int mColorStart=-12910632;
 	private int mColorEnd = -14114049;
     @InjectView(R.id.img_wall)
     ImageView mImg;
@@ -45,6 +47,8 @@ public class SetWallpaper extends Activity {
     @InjectView(R.id.btn_chooseColorStart)
     CircleButton mBtnColorStart;
 	private ColorPickerDialog mColorPickerDialog;
+	@InjectView(R.id.btn_setAswallpaper)
+	Button mSetAsWP;
 	private boolean isStart;
 	private Bus mBus;
     private int mCurrentGradient;
@@ -77,7 +81,16 @@ public class SetWallpaper extends Activity {
         }
     }
 
-    @Override
+	@Override
+	public void onBackPressed() {
+		LogUtil.d("isShow"+mColorPickerDialog.isShow());
+		if (mColorPickerDialog != null && mColorPickerDialog.isShow()){
+			mColorPickerDialog.dismiss();
+		}else
+			super.onBackPressed();
+	}
+
+	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.set_wallpaper, menu);
@@ -105,14 +118,16 @@ public class SetWallpaper extends Activity {
 
     @OnClick(R.id.btn_setAswallpaper)
     public void setAswallpaper(){
-
+		mSetAsWP.setEnabled(false);
         try{
 			mWallpaperManager.suggestDesiredDimensions(Misc.getScreenWidth(this),Misc.getScreenHeight(this));
         	mWallpaperManager.setBitmap(mImg.getDrawingCache());
 		 	mImg.setDrawingCacheEnabled(false);
         }catch (IOException e){
             e.printStackTrace();
-        }
+        }finally {
+			mSetAsWP.setEnabled(true);
+		}
 
     }
 
@@ -134,6 +149,7 @@ public class SetWallpaper extends Activity {
         mCurrentGradient = LINEAR;
 
 	}
+
 	@OnClick(R.id.btn_radial)
 	public void setColorRadial(){
 		Bitmap.Config config =  Bitmap.Config.ARGB_8888;
@@ -151,11 +167,12 @@ public class SetWallpaper extends Activity {
 		mImg.setImageBitmap(bitmap);
         mCurrentGradient = RADIAL;
 	}
+
 	@OnClick(R.id.btn_sweep)
 	public void setColorSweep(){
 		Bitmap.Config config =  Bitmap.Config.ARGB_8888;
 		// 建立对应 bitmap
-		Bitmap bitmap = Bitmap.createBitmap(Misc.getScreenWidth(this),Misc.getScreenHeight(this),config);
+		Bitmap bitmap = Bitmap.createBitmap(Misc.getScreenWidth(this),Misc.getScreenHeight(this)-Misc.getStatusBarHeight(this),config);
 		Canvas cv = new Canvas(bitmap);
 		Paint p=new Paint();
 //        RadialGradient lg  = new RadialGradient(Misc.getScreenWidth(this)/2,Misc.getScreenHeight(this)/2,400,mColorStart,mColorEnd, Shader.TileMode.CLAMP);
@@ -259,6 +276,9 @@ public class SetWallpaper extends Activity {
                 break;
         }
 	}
+
+
+
 
 
 }

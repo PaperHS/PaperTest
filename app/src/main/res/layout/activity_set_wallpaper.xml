@@ -13,8 +13,10 @@
         android:id="@+id/btn_setAswallpaper"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/trans_grey"
+        android:background="@drawable/setwallpaper_btn_selector"
         android:text="设为壁纸"
+        android:paddingLeft="20dp"
+        android:textSize="16sp"
         android:textColor="@android:color/white"
         android:gravity="left|center"/>
     <!--
@@ -45,25 +47,25 @@
     <LinearLayout
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="48dp"
         android:layout_centerVertical="true"
         >
 
         <Button
             android:id="@+id/btn_radial"
             android:background="@drawable/btn_radial"
-            android:layout_width="80dp"
-            android:layout_height="80dp" />
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
         <Button
             android:id="@+id/btn_sweep"
             android:background="@drawable/btn_sweep"
-            android:layout_width="80dp"
-            android:layout_height="80dp" />
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
         <Button
             android:id="@+id/btn_linear"
             android:background="@drawable/btn_linear"
-            android:layout_width="80dp"
-            android:layout_height="80dp" />
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
         </LinearLayout>
     <widget.CircleButton
         android:id="@+id/btn_chooseColorStart"

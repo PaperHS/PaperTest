@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="trans_white">#e0000000</color>
-    <color name="trans_grey">#00000000</color>
+    <color name="trans_white">#22222222</color>
+    <color name="trans_grey">#55111111</color>
 </resources>

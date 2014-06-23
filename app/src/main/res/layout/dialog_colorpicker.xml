@@ -31,6 +31,8 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:background="@drawable/popwin_btn_selector"
+            android:text="@string/btn_colorpicker_cancel"
+            android:textSize="14sp"
             android:layout_weight="1"/>
         <View
             android:layout_width="0.5dp"
@@ -40,6 +42,8 @@
             android:id="@+id/colorpicker_confirm"
             android:layout_width="0dp"
             android:layout_height="48dp"
+            android:textSize="14sp"
+            android:text="@string/btn_colorpicker_confirm"
             android:background="@drawable/popwin_btn_selector"
             android:layout_weight="1"/>
         </LinearLayout>

@@ -1,6 +1,7 @@
 package hs.myapplication;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,7 @@ public class ColorPickerDialog {
 
 
 	private ColorEvent mColorEvent = new ColorEvent();
+	private boolean mIsShow = false;
 
 	public ColorPickerDialog(Context context,View parent){
 		this.mParent = parent;
@@ -59,20 +61,23 @@ public class ColorPickerDialog {
 			}
 		});
 
+
 	}
 
 	public void show(){
 		if (mPopWin == null){
 			mPopWin = new PopupWindow(mRootLayout,mLayoutParams.width,mLayoutParams.height);
 			mPopWin.setFocusable(true);//get focus
+			mPopWin.setBackgroundDrawable(new BitmapDrawable());//just for back activity
 		}
-
+		mIsShow = true;
 		mPopWin.showAtLocation(mParent, Gravity.CENTER, Gravity.CENTER, Gravity.CENTER);
 	}
 
 	public void dismiss(){
 
 		if (mPopWin != null){
+			mIsShow = false;
 			mPopWin.dismiss();
 		}
 	}
@@ -89,7 +94,12 @@ public class ColorPickerDialog {
 	@OnClick(R.id.colorpicker_confirm)
 	public void clickConfirm(){
 		dismiss();
+		mColorEvent.setColor(mPicker.getColor());
 		BusProvider.getInstance().post(mColorEvent);
+	}
+
+	public boolean isShow(){
+		return mIsShow;
 	}
 
 
