@@ -5,4 +5,10 @@
         <!-- Customize your theme here. -->
     </style>
 
+
+    <style name="anim_popwindow" >
+        <item name="android:windowEnterAnimation">@anim/zoom_out</item>
+        <item name="android:windowExitAnimation">@anim/zoom_in</item>
+    </style>
+
 </resources>

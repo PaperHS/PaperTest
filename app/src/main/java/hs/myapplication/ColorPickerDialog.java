@@ -69,6 +69,8 @@ public class ColorPickerDialog {
 			mPopWin = new PopupWindow(mRootLayout,mLayoutParams.width,mLayoutParams.height);
 			mPopWin.setFocusable(true);//get focus
 			mPopWin.setBackgroundDrawable(new BitmapDrawable());//just for back activity
+			mPopWin.setAnimationStyle(R.style.anim_popwindow);
+
 		}
 		mIsShow = true;
 		mPopWin.showAtLocation(mParent, Gravity.CENTER, Gravity.CENTER, Gravity.CENTER);

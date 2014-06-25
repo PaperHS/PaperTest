@@ -8,6 +8,6 @@
     <string name="title_activity_colorpicker">colorpicker</string>
     <string name="btn_colorpicker_confirm">决定就是你了</string>
     <string name="btn_colorpicker_cancel">回来吧小火龙</string>
-
+    <string name="title_activity_lock_screen">LockScreenActivity</string>
 
 </resources>

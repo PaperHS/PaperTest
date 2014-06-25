@@ -1,8 +1,12 @@
 package hs.myapplication;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +15,7 @@ import android.widget.Button;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import utils.LogUtil;
 
 
 public class MyActivity extends Activity {
@@ -21,10 +26,10 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
         ButterKnife.inject(this);
+
     }
 
-
-    @Override
+	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
@@ -47,5 +52,6 @@ public class MyActivity extends Activity {
     public void goToWallpaper(){
         startActivity(new Intent(this,SetWallpaper.class));
     }
+
 
 }
