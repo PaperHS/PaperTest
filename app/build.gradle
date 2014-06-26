@@ -11,11 +11,67 @@ android {
         versionCode 1
         versionName "1.0"
     }
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+
+    //配置source路径（如果使用的不是默认路径的话，必须配置）
+    sourceSets{
+        main{
+            manifest.srcFile 'AndroidManifest.xml'
+            //下面的写法看起来比较简洁，当然你也可以用上面的写法
+//            java.srcDirs = ['src']
+//            resources.srcDirs = ['src']
+//            aidl.srcDirs = ['src']
+//            res.srcDirs = ['res']
+//            assets.srcDirs = ['assets']
         }
+        //测试所在的路径，这里假设是tests文件夹，没有可以不写这一行
+        //androidTest.setRoot('tests')
+    }
+    //签名
+    signingConfigs {
+//        debug {
+//            storeFile file("C:\\Users\\Administrator\\.android/debug.keystore")
+//        }
+
+        //你自己的keystore信息
+        release {
+            storeFile file("E:\\PeggyPaper.jks")
+            storePassword "y4yhl9t"
+            keyAlias "hsKey"
+            keyPassword "flzx3qc"
+        }
+    }
+
+    buildTypes {
+//        debug {
+//            signingConfig signingConfigs.debug
+//        }
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+
+    //渠道Flavors，我这里写了一些常用的，你们自己改
+    productFlavors {
+//        GooglePlay{}
+        Store360{}
+        //QQ{}
+        //Taobao{}
+        WanDouJia{}
+        //AnZhuo{}
+        //AnZhi{}
+//        BaiDu{}
+        //Store163{}
+        //GFeng{}
+        //AppChina{}
+        //EoeMarket{}
+        //Store91{}
+        //NDuo{}
+    }
+
+    //这个是解决lint报错的代码
+    lintOptions {
+        abortOnError false
     }
 }
 
@@ -26,7 +82,27 @@ dependencies {
     compile files('libs/android-nineold.jar')
     compile files('libs/otto-1.3.5.jar')
 }
+tasks.withType(Compile) {
+    options.encoding = "UTF-8"
+}
 
+android.applicationVariants.all{ variant ->
+    variant.processManifest.doLast{
+
+        //之前这里用的copy{}，我换成了文件操作，这样可以在v1.11版本正常运行，并保持文件夹整洁
+        //${buildDir}是指./build文件夹
+        //${variant.dirName}是flavor/buildtype，例如GooglePlay/release，运行时会自动生成
+        //下面的路径是类似这样：./build/manifests/GooglePlay/release/AndroidManifest.xml
+        def manifestFile = "${buildDir}/manifests/${variant.dirName}/AndroidManifest.xml"
+
+        //将字符串UMENG_CHANNEL_VALUE替换成flavor的名字
+        def updatedContent = new File(manifestFile).getText('UTF-8').replaceAll("UMENG_CHANNEL_VALUE", "${variant.productFlavors[0].name}")
+        new File(manifestFile).write(updatedContent, 'UTF-8')
+
+        //将此次flavor的AndroidManifest.xml文件指定为我们修改过的这个文件
+        variant.processResources.manifestFile = file("${buildDir}/manifests/${variant.dirName}/AndroidManifest.xml")
+    }
+}
 
 
 
