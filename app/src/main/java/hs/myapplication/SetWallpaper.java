@@ -22,6 +22,7 @@ import android.widget.ImageView;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 
@@ -97,7 +98,19 @@ public class SetWallpaper extends Activity {
         return true;
     }
 
-	@Override
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
+    @Override
 	protected void onDestroy() {
 		mBus.unregister(this);
 		super.onDestroy();

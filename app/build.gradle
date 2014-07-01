@@ -54,13 +54,13 @@ android {
     //渠道Flavors，我这里写了一些常用的，你们自己改
     productFlavors {
 //        GooglePlay{}
-        Store360{}
+//        Store360{}
         //QQ{}
         //Taobao{}
-        WanDouJia{}
+//        WanDouJia{}
         //AnZhuo{}
         //AnZhi{}
-        BaiDu{}
+//        BaiDu{}
         //Store163{}
         //GFeng{}
         //AppChina{}
@@ -85,24 +85,24 @@ dependencies {
 tasks.withType(Compile) {
     options.encoding = "UTF-8"
 }
-
-android.applicationVariants.all{ variant ->
-    variant.processManifest.doLast{
-
-        //之前这里用的copy{}，我换成了文件操作，这样可以在v1.11版本正常运行，并保持文件夹整洁
-        //${buildDir}是指./build文件夹
-        //${variant.dirName}是flavor/buildtype，例如GooglePlay/release，运行时会自动生成
-        //下面的路径是类似这样：./build/manifests/GooglePlay/release/AndroidManifest.xml
-        def manifestFile = "${buildDir}/intermediates/manifests/${variant.dirName}/AndroidManifest.xml"
-
-        //将字符串UMENG_CHANNEL_VALUE替换成flavor的名字
-        def updatedContent = new File(manifestFile).getText('UTF-8').replaceAll("UMENG_CHANNEL_VALUE", "${variant.productFlavors[0].name}")
-        new File(manifestFile).write(updatedContent, 'UTF-8')
-
-        //将此次flavor的AndroidManifest.xml文件指定为我们修改过的这个文件
-        variant.processResources.manifestFile = file("${buildDir}/intermediates/manifests/${variant.dirName}/AndroidManifest.xml")
-    }
-}
+//
+//android.applicationVariants.all{ variant ->
+//    variant.processManifest.doLast{
+//
+//        //之前这里用的copy{}，我换成了文件操作，这样可以在v1.11版本正常运行，并保持文件夹整洁
+//        //${buildDir}是指./build文件夹
+//        //${variant.dirName}是flavor/buildtype，例如GooglePlay/release，运行时会自动生成
+//        //下面的路径是类似这样：./build/manifests/GooglePlay/release/AndroidManifest.xml
+//        def manifestFile = "${buildDir}/intermediates/manifests/${variant.dirName}/AndroidManifest.xml"
+//
+//        //将字符串UMENG_CHANNEL_VALUE替换成flavor的名字
+//        def updatedContent = new File(manifestFile).getText('UTF-8').replaceAll("UMENG_CHANNEL_VALUE", "${variant.productFlavors[0].name}")
+//        new File(manifestFile).write(updatedContent, 'UTF-8')
+//
+//        //将此次flavor的AndroidManifest.xml文件指定为我们修改过的这个文件
+//        variant.processResources.manifestFile = file("${buildDir}/intermediates/manifests/${variant.dirName}/AndroidManifest.xml")
+//    }
+//}
 
 
 

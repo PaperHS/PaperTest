@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
-    <uses-feature android:name="android.software.live_wallpaper" />
+    <!--<uses-feature android:name="android.software.live_wallpaper" />-->
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -16,36 +16,36 @@
         <activity
             android:name=".MyActivity"
             android:label="@string/app_name" >
+
+        </activity>
+        <activity
+            android:name=".SetWallpaper"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:label="@string/title_activity_set_wallpaper" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SetWallpaper"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
-            android:label="@string/title_activity_set_wallpaper" >
-        </activity>
-        <activity
-            android:name=".Colorpicker"
-            android:label="@string/title_activity_colorpicker" >
-        </activity>
+        <!--<activity-->
+            <!--android:name=".Colorpicker"-->
+            <!--android:label="@string/title_activity_colorpicker" >-->
+        <!--</activity>-->
 
-        <service
-            android:name=".LiveWallHsService"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.BIND_WALLPAPER"
-            >
-            <intent-filter>
-                <action android:name="android.service.wallpaper.WallpaperService" />
-            </intent-filter>
-            <meta-data android:name="android.service.wallpaper"
-                       android:resource="@xml/livewallpaper" />
-        </service>
+        <!--<service-->
+            <!--android:name=".LiveWallHsService"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true"-->
+            <!--android:permission="android.permission.BIND_WALLPAPER"-->
+            <!-->-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.service.wallpaper.WallpaperService" />-->
+            <!--</intent-filter>-->
+            <!--<meta-data android:name="android.service.wallpaper"-->
+                       <!--android:resource="@xml/livewallpaper" />-->
+        <!--</service>-->
         <meta-data android:value="53aacb9656240bdd89013504" android:name="UMENG_APPKEY"></meta-data>
         <meta-data android:value="UMENG_CHANNEL_VALUE" android:name="UMENG_CHANNEL"/>
     </application>
-
 </manifest>
